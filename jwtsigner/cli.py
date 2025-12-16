@@ -31,7 +31,9 @@ def main():
 
     if args.command in (None, "create"):
         try:
-            approve_val = args.approve
+            approve_val = getattr(args, 'approve', None)
+            if approve_val is None:
+                approve_val = True
             # Convert string to bool if needed
             if isinstance(approve_val, str):
                 if approve_val.lower() == "true":
