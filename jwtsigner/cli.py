@@ -10,7 +10,7 @@ def main():
 
     # Create command (default)
     parser_create = subparsers.add_parser("create", help="Create a new JWT token")
-    parser_create.add_argument("--private-key", type=str, help="Path to private key file")
+    parser_create.add_argument("--private-key", type=str, default="../tests/keys/private.txt", help="Path to private key file (default: ../tests/keys/private.txt)")
     parser_create.add_argument("--issuer", type=str, default=JWT_ISSUER, help="Token issuer URL")
     parser_create.add_argument("--username", type=str, default="admin", help="Username for payload (default: admin)")
     parser_create.add_argument("--approve", type=str, default="True", help="Approve value for payload (default: True)")
@@ -23,9 +23,9 @@ def main():
     # Edit command
     parser_edit = subparsers.add_parser("edit", help="Edit a JWT token's payload or header (iss only)")
     parser_edit.add_argument("--token", type=str, required=True, help="JWT token to edit")
-    parser_edit.add_argument("--private-key", type=str, help="Path to private key file")
-    parser_edit.add_argument("--set-payload", nargs=2, action='append', metavar=('KEY', 'VALUE'), help="Set payload key to value (can be used multiple times)")
-    parser_edit.add_argument("--set-iss", type=str, help="Set 'iss' in header")
+    parser_edit.add_argument("--private-key", type=str, default="../tests/keys/private.txt", help="Path to private key file (default: ../tests/keys/private.txt)")
+    parser_edit.add_argument("--approve", type=str, help="Set approve value in payload (true/false)")
+    parser_edit.add_argument("--issuer", type=str, help="Set 'iss' in header")
 
     args = parser.parse_args()
 
@@ -42,7 +42,7 @@ def main():
                     approve_val = False
             token = create_jwt_token(
                 issuer=getattr(args, 'issuer', JWT_ISSUER),
-                private_key_path=getattr(args, 'private_key', None),
+                private_key_path=getattr(args, 'private-key', None),
                 username=getattr(args, 'username', "admin"),
                 approve=approve_val
             )
@@ -66,7 +66,22 @@ def main():
             sys.exit(1)
     elif args.command == "edit":
         try:
-            new_token = edit_jwt_token(args.token, set_payload=args.set_payload, set_iss=args.set_iss, private_key_path=getattr(args, 'private_key', None))
+            set_payload = []
+            if args.approve is not None:
+                approve_val = args.approve
+                if isinstance(approve_val, str):
+                    if approve_val.lower() == "true":
+                        approve_val = True
+                    elif approve_val.lower() == "false":
+                        approve_val = False
+                set_payload.append(["approve", approve_val])
+            set_iss = args.issuer if hasattr(args, 'issuer') else None
+            new_token = edit_jwt_token(
+                args.token,
+                set_payload=set_payload if set_payload else None,
+                set_iss=set_iss,
+                private_key_path=getattr(args, 'private-key', None)
+            )
             print(f"Edited JWT Token:\n{new_token}")
         except Exception as e:
             print(f"Failed to edit JWT token: {str(e)}")
