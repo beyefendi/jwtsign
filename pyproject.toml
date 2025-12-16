@@ -16,6 +16,12 @@ dependencies = [
     "cryptography"
 ]
 
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "flake8"
+]
+
 [project.scripts]
 jwtsigner = "jwtsigner.cli:main"
 
