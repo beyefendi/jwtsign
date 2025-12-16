@@ -1,4 +1,3 @@
-
 import logging
 import os
 import sys
@@ -12,10 +11,14 @@ logger = logging.getLogger(__name__)
 
 def load_private_key(private_key_path=None):
     """Load the RSA private key from file."""
-    key_path = private_key_path or os.environ.get(
-        "JWT_PRIVATE_KEY_PATH",
-        os.path.join(os.path.dirname(__file__), "../private_key.pem")
-    )
+    if private_key_path:
+        key_path = private_key_path
+    elif os.environ.get("JWT_PRIVATE_KEY_PATH"):
+        key_path = os.environ["JWT_PRIVATE_KEY_PATH"]
+    else:
+        # Use a path relative to the current working directory
+        key_path = os.path.join("tests", "keys", "private.txt")
+        print(f"Using default private key path: {os.path.abspath(key_path)}")
     try:
         with open(key_path, 'r') as key_file:
             return key_file.read()
@@ -24,11 +27,11 @@ def load_private_key(private_key_path=None):
         print("\n" + "=" * 70)
         print("ERROR: Private key file not found!")
         print("=" * 70)
-        print(f"\nLooking for: {key_path}\n")
+        print(f"\nLooking for: {os.path.abspath(key_path)}\n")
         print("To fix this issue, you have two options:\n")
         print("1. Generate a new RSA key pair:")
         print("   openssl genrsa -out private_key.pem 2048")
-        print(f"   (Save it to: {key_path})\n")
+        print(f"   (Save it to: {os.path.abspath(key_path)})\n")
         print("2. Specify a custom key file path:")
         print("   export JWT_PRIVATE_KEY_PATH=/path/to/your/private_key.pem")
         print("   jwtsigner\n")
