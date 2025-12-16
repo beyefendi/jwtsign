@@ -67,8 +67,8 @@ You can install the package using the provided `requirements.txt` file:
 
 ```bash
 cd /location/you-want-to-install
-git clone https://github.com/beyefendi/jwtsigner.git
-cd jwtsigner
+git clone https://github.com/beyefendi/jwtsign.git
+cd jwtsign
 ```
 
 #### Step 2: Create Virtual Environment
@@ -93,8 +93,8 @@ This method installs the package in a central location accessible to all users (
 
 ```bash
 cd /opt
-sudo git clone https://github.com/beyefendi/jwtsigner.git
-cd jwtsigner/
+sudo git clone https://github.com/beyefendi/jwtsign.git
+cd jwtsign/
 ```
 
 #### Step 2: Create Virtual Environment
@@ -147,8 +147,8 @@ For local development or single-user systems.
 
 ```bash
 cd /location/you-want-to-install
-git clone https://github.com/beyefendi/jwtsigner.git
-cd jwtsigner
+git clone https://github.com/beyefendi/jwtsign.git
+cd jwtsign
 ```
 
 #### Step 2: Create Virtual Environment
@@ -263,6 +263,12 @@ jwtsigner edit --token <JWT_TOKEN> --set-payload approve true --set-iss "http://
 
 ## Maintenance
 
+### Get updates
+
+```bash
+git pull origin main
+```
+
 ### Updating
 
 For user or system-wide installation:
@@ -271,7 +277,6 @@ pip install . --upgrade
 ```
 
 For development, you do not need anything to do:
-
 
 ### Uninstalling
 
