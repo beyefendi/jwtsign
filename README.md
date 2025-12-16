@@ -118,7 +118,8 @@ deactivate
 
 #### Step 4: Create Wrapper Script
 
-Create `/usr/local/bin/jwtsigner`:
+
+Create `/usr/local/bin/jwtsigner-run` file (do not use same name with python package):
 
 ```bash
 #!/bin/bash
