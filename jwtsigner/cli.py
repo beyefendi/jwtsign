@@ -9,21 +9,27 @@ def main():
     subparsers = parser.add_subparsers(dest="command", required=False)
 
     # Create command (default)
+
     parser_create = subparsers.add_parser("create", help="Create a new JWT token")
-    parser_create.add_argument("--private-key", type=str, default="../tests/keys/private.txt", help="Path to private key file (default: ../tests/keys/private.txt)")
+    parser_create.add_argument("--private-key", type=str, help="Path to private key file (default: ../tests/keys/private.txt)")
     parser_create.add_argument("--issuer", type=str, default=JWT_ISSUER, help="Token issuer URL")
     parser_create.add_argument("--username", type=str, default="admin", help="Username for payload (default: admin)")
     parser_create.add_argument("--approve", type=str, default="True", help="Approve value for payload (default: True)")
 
     # Read command
+
     parser_read = subparsers.add_parser("read", help="Read and decode a JWT token")
     parser_read.add_argument("--token", type=str, required=True, help="JWT token to decode")
-    parser_read.add_argument("--public-key", type=str, help="Path to public key for RS256 verification (optional)")
+    parser_read.add_argument("--public-key", type=str, help="Path to public key for RS256 verification (default: ../tests/keys/public.txt)")
+    parser_read.add_argument("--verify-signature", action="store_true", default=True, help="Verify JWT signature (default: True)")
 
     # Edit command
+
     parser_edit = subparsers.add_parser("edit", help="Edit a JWT token's payload or header (iss only)")
     parser_edit.add_argument("--token", type=str, required=True, help="JWT token to edit")
-    parser_edit.add_argument("--private-key", type=str, default="../tests/keys/private.txt", help="Path to private key file (default: ../tests/keys/private.txt)")
+    parser_edit.add_argument("--private-key", type=str, help="Path to private key file (default: ../tests/keys/private.txt)")
+    parser_edit.add_argument("--public-key", type=str, help="Path to public key for RS256 verification (default: ../tests/keys/public.txt)")
+    parser_edit.add_argument("--verify-signature", action="store_true", default=True, help="Verify JWT signature (default: True)")
     parser_edit.add_argument("--approve", type=str, help="Set approve value in payload (true/false)")
     parser_edit.add_argument("--issuer", type=str, help="Set 'iss' in header")
 
@@ -34,7 +40,6 @@ def main():
             approve_val = getattr(args, 'approve', None)
             if approve_val is None:
                 approve_val = True
-            # Convert string to bool if needed
             if isinstance(approve_val, str):
                 if approve_val.lower() == "true":
                     approve_val = True
@@ -42,7 +47,7 @@ def main():
                     approve_val = False
             token = create_jwt_token(
                 issuer=getattr(args, 'issuer', JWT_ISSUER),
-                private_key_path=getattr(args, 'private-key', None),
+                private_key_path=getattr(args, 'private_key', None),
                 username=getattr(args, 'username', "admin"),
                 approve=approve_val
             )
@@ -52,11 +57,11 @@ def main():
             sys.exit(1)
     elif args.command == "read":
         try:
-            key = None
-            if args.public_key:
-                with open(args.public_key, 'r') as f:
-                    key = f.read()
-            header, payload = decode_jwt_token(args.token, key, verify_signature=bool(key))
+            header, payload = decode_jwt_token(
+                args.token,
+                public_key_path=args.public_key,
+                verify_signature=args.verify_signature
+            )
             print("Header:")
             print(header)
             print("Payload:")
@@ -80,7 +85,9 @@ def main():
                 args.token,
                 set_payload=set_payload if set_payload else None,
                 set_iss=set_iss,
-                private_key_path=getattr(args, 'private-key', None)
+                private_key_path=args.private_key,
+                public_key_path=args.public_key,
+                verify_signature=args.verify_signature
             )
             print(f"Edited JWT Token:\n{new_token}")
         except Exception as e:
