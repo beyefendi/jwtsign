@@ -201,7 +201,7 @@ The generated JWT token includes:
 
 ```bash
 # Create a new JWT token
-jwtsigner create
+jwtsigner create --approve false
 
 # With custom private key
 jwtsigner create --private-key /path/to/your/private_key.pem
@@ -237,7 +237,7 @@ Payload:
 {'username': 'admin', 'approve': False}
 
 # Example 2
-jwtsigner read --token eyJhbGciOiJSUzI1NiIsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTAwMC91cGxvYWRzL2FkbWluL3B1YmxpYy50eHQiLCJ0eXAiOiJKV1QifQ.eyJ1c2VybmFtZSI6ImFkbWluIiwiYXBwcm92ZSI6InRydWUifQ.l6EoWm87BlqXrd09njeWYdWFgIuT5HNK2MzQjCLKjqG2v3cPNutjGIbrneV5jaNytG2XRTOotVKC83rRDNfJdySkDY7OyacQNo7jGxOUlpbU52TWlPNmxqtQw3xPnguUuAVoT75l3WhdxK-uCGkERr8dJqNS06Ub8K7XUANzJAgpg73amUX7MXOnYQ1_utfQd7j21gi2cFQjzJxKwHo-j8ALn-_08TPOhDbWITwhDScyx0u8zwdQNGGe0ErdDHoco7uZXEGH_vqUsir7f0W-0oacnbrsQdi22TTNGIwP0gLVH9N3oe6KqULKQ6Pu_PGjZrgj8dgwixTkLHLkc-Lbig --public-key public.txt
+jwtsigner read --token eyJhbGciOiJSUzI1NiIsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTAwMC91cGxvYWRzL2FkbWluL3B1YmxpYy50eHQiLCJ0eXAiOiJKV1QifQ.eyJ1c2VybmFtZSI6ImFkbWluIiwiYXBwcm92ZSI6dHJ1ZX0.PpXTCEbOlc4SsF9V8JwFaPPh7ASLkwV46voEc1RLXzpd5WydpVKFkUpRkwhNZe_4Pa9LWUu9Ora3jsKOyryysVlpaEApHPalpr6nBmuFOvfB3rXhNmck37AGkBC-iztfnLiApC2I1HJRtW8JhSz7B4Ks7lgB8H0M3MloiYmgw1sFueZ_NMrFC_y0XnpxOWA8GCflm3ThQTA3t4060SHkmA94c4jHhhBmPoykY43rxpME2jv-y7_NRb6omlbODm42gUi9XI_9NNt959uzETkYUVX8wlMZxFHv8d2QirOY6oIHAs26c8F97oIGxfOF59Bl3yhnbpZChJfHk-p6qzvWbw --public-key public.txt
 
 # Output
 Header:
@@ -250,16 +250,16 @@ Payload:
 
 ```bash
 # Change payload fields (e.g., username and approve)
-jwtsigner edit --token <JWT_TOKEN> --set-payload username newuser --set-payload approve false
+jwtsigner edit --token <JWT_TOKEN> --approve false --issuer "http://localhost:5000/uploads/admin/public.txt"
 
 # Change only the 'iss' field in the header
-jwtsigner edit --token <JWT_TOKEN> --set-iss "https://newissuer.com/keys.pub"
+jwtsigner edit --token <JWT_TOKEN> --issuer "https://newissuer.com/keys.pub"
 
 # Change both payload and header
-jwtsigner edit --token <JWT_TOKEN> --set-payload username newuser --set-iss "https://newissuer.com/keys.pub"
+jwtsigner edit --token <JWT_TOKEN> --set-payload username newuser --issuer "https://newissuer.com/keys.pub"
 
 # With custom private key
-jwtsigner edit --token <JWT_TOKEN> --set-payload approve true --set-iss "http://localhost:5000/uploads/admin/public.txt" --private-key private.txt
+jwtsigner edit --token <JWT_TOKEN> --approve true --issuer "http://localhost:5000/uploads/admin/public.txt" --private-key private.txt
 ```
 
 ## Maintenance
