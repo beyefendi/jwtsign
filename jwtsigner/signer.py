@@ -1,7 +1,8 @@
+import logging
 import os
 import sys
+
 import jwt
-import logging
 
 JWT_ALGORITHM = "RS256"
 JWT_ISSUER = "http://localhost:5000/static/keys.pub"
@@ -76,9 +77,7 @@ def edit_jwt_token(token, set_payload=None, set_iss=None, private_key_path=None)
 	except Exception as e:
 		logger.error(f"Failed to edit JWT token: {str(e)}")
 		raise
-import jwt
 import logging
-from datetime import datetime, timedelta
 
 logger = logging.getLogger(__name__)
 

@@ -1,6 +1,8 @@
 
 import os
+
 import pytest
+
 from jwtsigner import signer
 
 EXAMPLE_PRIVATE_KEY = "tests/keys/private.txt"

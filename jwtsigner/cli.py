@@ -1,6 +1,8 @@
-import sys
 import argparse
-from .signer import create_jwt_token, decode_jwt_token, edit_jwt_token, JWT_ISSUER, JWT_EXPIRATION_HOURS
+import sys
+
+from .signer import JWT_ISSUER, create_jwt_token, decode_jwt_token, edit_jwt_token
+
 
 def main():
     parser = argparse.ArgumentParser(description="JWT Signer Utility")
