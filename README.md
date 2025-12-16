@@ -199,6 +199,8 @@ The generated JWT token includes:
 
 ### 1. Create a JWT Token (default)
 
+When creating a token, only private key is required to sign the token.
+
 ```bash
 # Create a new JWT token
 jwtsigner create --approve false
@@ -219,6 +221,8 @@ jwtsigner create
 ```
 
 ### 2. Read/Decode a JWT Token
+
+When reading a token, only public key is required to verify the signature.
 
 ```bash
 # View the header and payload of a JWT token
@@ -248,9 +252,11 @@ Payload:
 
 ### 3. Edit a JWT Token (payload or 'iss' in header)
 
+When editing a token, both private and public keys are required.
+
 ```bash
 # Change payload fields (e.g., username and approve)
-jwtsigner edit --token <JWT_TOKEN> --approve false --issuer "http://localhost:5000/uploads/admin/public.txt"
+jwtsigner edit --token <JWT_TOKEN> --approve true --issuer "http://localhost:5000/uploads/admin/public.txt"
 
 # Change only the 'iss' field in the header
 jwtsigner edit --token <JWT_TOKEN> --issuer "https://newissuer.com/keys.pub"
