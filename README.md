@@ -93,14 +93,14 @@ This method installs the package in a central location accessible to all users (
 
 ```bash
 cd /opt
-git clone https://github.com/beyefendi/jwtsigner.git
+sudo git clone https://github.com/beyefendi/jwtsigner.git
 cd jwtsigner/
 ```
 
 #### Step 2: Create Virtual Environment
 
 ```bash
-sudo python3 -m venv .venv
+python3 -m venv .venv
 # Activate environment
 source .venv/bin/activate
 ```
@@ -128,7 +128,7 @@ VENV_PATH="/opt/jwtsigner/.venv"
 
 # Activate and run
 source "$VENV_PATH/bin/activate"
-python -m jwtsigner "$@"
+python -m jwtsigner.cli "$@"
 deactivate
 ```
 
@@ -292,7 +292,7 @@ sudo rm /usr/local/bin/jwtsigner
 For system-wide installation, ensure you have sudo privileges:
 ```bash
 sudo chmod 755 /opt/jwtsigner
-sudo chown -R $(whoami) /opt/jwtsigner
+sudo chown -R $(whoami):$(whoami) /opt/jwtsigner
 ```
 
 ## Security Notes
